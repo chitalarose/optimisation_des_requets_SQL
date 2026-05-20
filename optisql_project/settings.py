@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+    # Tu ajoutes cette ligne juste ici :
+    'labo_performance',
 ]
 
 MIDDLEWARE = [
