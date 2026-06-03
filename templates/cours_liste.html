@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Cours et Tutoriels - SQL Optimizer{% endblock %}
+
+{% block content %}
+<section class="courses-container">
+    <h1>Cours et Tutoriels</h1>
+    <p>Apprenez à optimiser vos requêtes SQL étape par étape.</p>
+    
+    <div class="filter-buttons">
+        <button class="btn-filter active">Tous les niveaux</button>
+        <button class="btn-filter">Débutant</button>
+        <button class="btn-filter">Intermédiaire</button>
+        <button class="btn-filter">Avancé</button>
+    </div>
+
+    <div class="courses-grid">
+        <div class="course-card">
+            <h3>Les bases des index</h3>
+            <p>Découvrez comment les index fonctionnent et améliorent les performances...</p>
+            <span class="badge badge-easy">Débutant</span>
+            <a href="#" class="btn-link">Lire le cours →</a>
+        </div>
+        </div>
+</section>
+{% endblock %}

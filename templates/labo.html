@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}Laboratoire Avant/Après - SQL Optimizer{% endblock %}
+
+{% block content %}
+<div class="labo-container">
+    
+    <section class="labo-header">
+        <h1>Laboratoire : Avant / Après</h1>
+        <p>Comparez les performances d'une requête non optimisée et d'une requête optimisée.</p>
+    </section>
+
+    <div class="labo-comparison-grid">
+        
+        <div class="labo-card card-before">
+            <h3>Requête non optimisée (Avant)</h3>
+            
+            <div class="code-box">
+                <span class="badge-lang">SQL</span>
+                <button class="btn-copy">📋 Copier</button>
+                <pre><code class="language-sql">SELECT * FROM commandes WHERE DATE(created_at) = '2024-01-01';</code></pre>
+            </div>
+
+            <div class="metrics-box">
+                <p><strong>Temps d'exécution :</strong> <span class="time-metric alert-red">1250 ms</span></p>
+                <div class="gauge-container">
+                    <div class="gauge gauge-red"></div>
+                    <span class="status-emoji">🙁</span>
+                </div>
+                <div class="details-list">
+                    <p><strong>Lignes analysées :</strong> 523,000</p>
+                    <p><strong>Utilisation des index :</strong> ❌ Non</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="labo-card card-after">
+            <h3>Requête optimisée (Après)</h3>
+            
+            <div class="code-box">
+                <span class="badge-lang">SQL</span>
+                <button class="btn-copy">📋 Copier</button>
+                <pre><code class="language-sql">SELECT * FROM commandes 
+WHERE created_at >= '2024-01-01' 
+AND created_at < '2024-01-02';</code></pre>
+            </div>
+
+            <div class="metrics-box">
+                <p><strong>Temps d'exécution :</strong> <span class="time-metric success-green">48 ms</span></p>
+                <div class="gauge-container">
+                    <div class="gauge gauge-green"></div>
+                    <span class="status-emoji">😊</span>
+                </div>
+                <div class="details-list">
+                    <p><strong>Lignes analysées :</strong> 1,253</p>
+                    <p><strong>Utilisation des index :</strong>  Oui (idx_created_at)</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="labo-actions">
+        <button id="btn-run-test" class="btn-run">▶ Lancer le test</button>
+    </div>
+
+</div>
+{% endblock %}

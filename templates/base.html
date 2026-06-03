@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SQL Optimizer{% endblock %}</title>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+    <header>
+        <nav class="navbar">
+            <div class="nav-logo">
+                <strong>📊 SQL Optimizer</strong>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#">Accueil</a></li>
+                <li><a href="#">Cours</a></li>
+                <li><a href="#">Laboratoire</a></li>
+                <li><a href="#">Quiz</a></li>
+                <li><a href="#">À propos</a></li>
+            </ul>
+            <div class="nav-auth">
+                <button class="btn-connect">Se connecter</button>
+            </div>
+        </nav>
+    </header>
+
+    <main class="content-container">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2026 SQL Optimizer - Projet Intégrateur S4</p>
+    </footer>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

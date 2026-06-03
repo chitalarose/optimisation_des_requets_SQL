@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}Lecture du Cours - SQL Optimizer{% endblock %}
+
+{% block content %}
+<div class="course-detail-container">
+
+    <div class="back-to-courses">
+        <a href="#" class="btn-back">← Retour aux cours</a>
+    </div>
+
+    <div class="course-main-layout">
+        
+        <article class="course-article">
+            <header class="article-header">
+                <span class="badge badge-success">Débutant</span>
+                <h1>Les bases des index</h1>
+                <div class="article-meta">
+                    <span>📚 7 leçons</span> • <span>⏱ 30 min</span>
+                </div>
+                <p class="article-lead">
+                    Découvrez comment les index fonctionnent et comment ils peuvent considérablement améliorer les performances de vos requêtes SQL.
+                </p>
+            </header>
+
+            <hr>
+
+            <section class="article-section">
+                <h2>1. Qu'est-ce qu'un index ?</h2>
+                <p>
+                    Un index est une structure de données qui améliore la vitesse de recherche dans une table. Sans index, la base doit scanner toutes les lignes (Full Table Scan). Avec un index, elle accède directement aux données.
+                </p>
+            </section>
+
+            <section class="article-section">
+                <h2>2. Créer un index</h2>
+                <p>Syntaxe de base :</p>
+                
+                <div class="code-box">
+                    <button class="btn-copy">📋 Copier</button>
+                    <pre><code class="language-sql">CREATE INDEX nom_index ON nom_table (colonne);</code></pre>
+                </div>
+
+                <p>Exemple :</p>
+                <div class="code-box">
+                    <button class="btn-copy">📋 Copier</button>
+                    <pre><code class="language-sql">CREATE INDEX idx_nom_utilisateur ON utilisateurs (nom);</code></pre>
+                </div>
+            </section>
+
+            <section class="article-section">
+                <h2>3. Utiliser EXPLAIN pour vérifier</h2>
+                <p>Vérifions que l'index est bien utilisé par le moteur :</p>
+                <div class="code-box">
+                    <button class="btn-copy">📋 Copier</button>
+                    <pre><code class="language-sql">EXPLAIN SELECT * FROM utilisateurs WHERE nom = 'John';</code></pre>
+                </div>
+            </section>
+        </article>
+
+        <aside class="course-sidebar">
+            
+            <div class="sidebar-widget widget-summary">
+                <h3>Sommaire du cours</h3>
+                <ol class="summary-list">
+                    <li class="active"><a href="#">1. Qu'est-ce qu'un index ?</a></li>
+                    <li><a href="#">2. Créer un index</a></li>
+                    <li><a href="#">3. Utiliser EXPLAIN</a></li>
+                    <li><a href="#">4. Types d'index</a></li>
+                    <li><a href="#">5. Bonnes pratiques</a></li>
+                    <li><a href="#">6. Erreurs à éviter</a></li>
+                    <li><a href="#">7. Quiz final</a></li>
+                </ol>
+            </div>
+
+            <div class="sidebar-widget widget-lab-invite">
+                <h3>Exemple pratique</h3>
+                <p>Essayez vous-même dans le laboratoire interactif.</p>
+                <a href="#" class="btn-sidebar-action">Ouvrir le laboratoire</a>
+            </div>
+
+        </aside>
+
+    </div>
+</div>
+{% endblock %}
