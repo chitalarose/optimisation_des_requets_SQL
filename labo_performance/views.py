@@ -9,7 +9,8 @@ def dashboard_home(request):
     context = {
         'dernieres_analyses': dernieres_analyses,
     }
-    return render(request, 'labo_performance/dashboard.html', context)
+    # On utilise index.html (le fichier de ta développeuse)
+    return render(request, 'labo_performance/index.html', context)
 
 # Vue pour la liste des cours (Espace Learn)
 def liste_cours(request):
@@ -22,4 +23,5 @@ def liste_cours(request):
         'cours_intermediaire': cours_intermediaire,
         'cours_avance': cours_avance,
     }
-    return render(request, 'labo_performance/learn_list.html', context)
+    # On utilise cours_liste.html (le fichier de ta développeuse)
+    return render(request, 'labo_performance/cours_liste.html', context)
