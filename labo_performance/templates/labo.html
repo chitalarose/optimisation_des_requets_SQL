@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Laboratoire SQL — OptiSQL{% endblock %}
+
+{% block content %}
+<div class="labo-container">
+
+  <h1 class="labo-title">Laboratoire : Avant / Après</h1>
+  <p class="labo-sub">Comparez les performances d'une requête non optimisée et optimisée.</p>
+
+  <!-- Warn box -->
+  <div id="warn-box" class="warn-box" style="display:none;"></div>
+
+  <!-- Éditeur SQL -->
+  <div class="editor-wrap">
+    <div class="editor-bar">
+      <span>SQL — Requête utilisateur</span>
+      <span class="sandbox-badge">Sandbox sécurisée</span>
+    </div>
+    <textarea id="sql-input" class="sql-editor" spellcheck="false">SELECT * FROM commandes
+WHERE DATE(created_at) = '2024-01-01';</textarea>
+  </div>
+
+  <div class="editor-actions">
+    <button id="run-btn" class="run-btn">Exécuter</button>
+    <span class="hint">ou Ctrl+Enter</span>
+  </div>
+
+  <!-- Métriques -->
+  <div class="metrics-grid">
+    <div class="metric">
+      <div class="metric-label">Temps d'exécution</div>
+      <div class="metric-val" id="exec-time">— ms</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Lignes analysées</div>
+      <div class="metric-val" id="rows-count">—</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Index utilisé</div>
+      <div class="metric-val" id="index-used">—</div>
+    </div>
+  </div>
+
+  <!-- Graphique -->
+  <div class="section-label">Comparaison Before / After</div>
+  <div id="perf-gain" class="perf-gain"></div>
+  <div class="chart-wrap">
+    <canvas id="bar-chart"></canvas>
+  </div>
+
+  <!-- EXPLAIN -->
+  <div class="section-label">EXPLAIN ANALYZE</div>
+  <div id="explain-box" class="explain-box">Exécutez une requête pour voir le plan…</div>
+
+  <!-- Flowchart -->
+  <div class="section-label">Plan d'exécution</div>
+  <div class="fc-btns">
+    <button id="btn-plan-slow" class="fc-btn">Requête lente</button>
+    <button id="btn-plan-fast" class="fc-btn">Requête optimisée</button>
+  </div>
+  <div id="flowchart" class="flowchart"></div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{% static 'js/charts.js' %}"></script>
+<script src="{% static 'js/editor.js' %}"></script>
+<script src="{% static 'js/flowchart.js' %}"></script>
+{% endblock %}
