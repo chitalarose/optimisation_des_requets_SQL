@@ -1,0 +1,42 @@
+
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Quiz SQL — OptiSQL{% endblock %}
+
+{% block content %}
+<div class="quiz-container">
+
+  <h1 class="quiz-title">Quiz SQL</h1>
+
+  <!-- Score et streak -->
+  <div class="quiz-header">
+    <span id="quiz-score" class="score-badge">Score : 0 pts</span>
+    <span id="quiz-streak" class="streak-badge">Streak : 0</span>
+  </div>
+
+  <!-- Barre de progression -->
+  <div class="quiz-progress-bar">
+    <div id="quiz-progress-fill" class="quiz-progress-fill" style="width:0%"></div>
+  </div>
+
+  <!-- Question -->
+  <div id="quiz-question" class="quiz-question"></div>
+
+  <!-- Options -->
+  <div id="quiz-options" class="quiz-options"></div>
+
+  <!-- Feedback -->
+  <div id="quiz-feedback" class="quiz-feedback" style="display:none;"></div>
+
+  <!-- Bouton suivant -->
+  <button id="next-btn" class="next-btn" style="display:none;">
+    Question suivante →
+  </button>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/quiz.js' %}"></script>
+{% endblock %}
