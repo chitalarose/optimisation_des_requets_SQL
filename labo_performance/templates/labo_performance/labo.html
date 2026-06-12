@@ -1,68 +1,71 @@
-{% extends 'base.html' %}
-
+{% extends 'labo_performance/base.html' %}
+{% load static %}
 {% block title %}Laboratoire Avant/Après - SQL Optimizer{% endblock %}
 
 {% block content %}
 <div class="labo-container">
-    
-    <section class="labo-header">
-        <h1>Laboratoire : Avant / Après</h1>
-        <p>Comparez les performances d'une requête non optimisée et d'une requête optimisée.</p>
-    </section>
+<section class="labo-header">
+    <h1>Laboratoire : Avant / Après</h1>
+    <p>Comparez les performances d'une requête non optimisée et d'une requête optimisée.</p>
+</section>
 
-    <div class="labo-comparison-grid">
-        
-        <div class="labo-card card-before">
-            <h3>Requête non optimisée (Avant)</h3>
-            
-            <div class="code-box">
-                <span class="badge-lang">SQL</span>
-                <button class="btn-copy">📋 Copier</button>
-                <pre><code class="language-sql">SELECT * FROM commandes WHERE DATE(created_at) = '2024-01-01';</code></pre>
-            </div>
+<div id="warn-box" class="warn-box" style="display:none;"></div>
 
-            <div class="metrics-box">
-                <p><strong>Temps d'exécution :</strong> <span class="time-metric alert-red">1250 ms</span></p>
-                <div class="gauge-container">
-                    <div class="gauge gauge-red"></div>
-                    <span class="status-emoji">🙁</span>
-                </div>
-                <div class="details-list">
-                    <p><strong>Lignes analysées :</strong> 523,000</p>
-                    <p><strong>Utilisation des index :</strong> ❌ Non</p>
-                </div>
+<div class="labo-comparison-grid">
+
+    <!-- Avant -->
+    <div class="labo-card card-before">
+        <h3>Requête à tester</h3>
+        <div class="code-box">
+            <span class="badge-lang">SQL</span>
+            <textarea id="sql-input" class="sql-editor" spellcheck="false">SELECT * FROM commandes WHERE DATE(created_at) = '2024-01-01';</textarea>
+        </div>
+        <div class="metrics-box">
+            <p><strong>Temps d'exécution :</strong> <span id="exec-time" class="time-metric">— ms</span></p>
+            <div class="details-list">
+                <p><strong>Lignes analysées :</strong> <span id="rows-count">—</span></p>
+                <p><strong>Utilisation des index :</strong> <span id="index-used">—</span></p>
             </div>
         </div>
-
-        <div class="labo-card card-after">
-            <h3>Requête optimisée (Après)</h3>
-            
-            <div class="code-box">
-                <span class="badge-lang">SQL</span>
-                <button class="btn-copy">📋 Copier</button>
-                <pre><code class="language-sql">SELECT * FROM commandes 
-WHERE created_at >= '2024-01-01' 
-AND created_at < '2024-01-02';</code></pre>
-            </div>
-
-            <div class="metrics-box">
-                <p><strong>Temps d'exécution :</strong> <span class="time-metric success-green">48 ms</span></p>
-                <div class="gauge-container">
-                    <div class="gauge gauge-green"></div>
-                    <span class="status-emoji">😊</span>
-                </div>
-                <div class="details-list">
-                    <p><strong>Lignes analysées :</strong> 1,253</p>
-                    <p><strong>Utilisation des index :</strong>  Oui (idx_created_at)</p>
-                </div>
-            </div>
-        </div>
-
     </div>
 
-    <div class="labo-actions">
-        <button id="btn-run-test" class="btn-run">▶ Lancer le test</button>
+    <!-- Après / Résultat -->
+    <div class="labo-card card-after">
+        <h3>Comparaison Before / After</h3>
+        <p id="perf-gain" class="perf-gain"></p>
+        <div class="chart-wrap" style="position:relative; height:220px;">
+            <canvas id="bar-chart"></canvas>
+        </div>
     </div>
 
 </div>
+
+<div class="labo-actions">
+    <button id="run-btn" class="btn-run">▶ Lancer le test</button>
+</div>
+
+<!-- EXPLAIN -->
+<section class="explain-section">
+    <h3>EXPLAIN ANALYZE</h3>
+    <pre id="explain-box" class="explain-box">Exécutez une requête pour voir le plan…</pre>
+</section>
+
+<!-- Flowchart -->
+<section class="flowchart-section">
+    <h3>Plan d'exécution</h3>
+    <div class="fc-btns">
+        <button id="btn-plan-slow" class="btn-secondary">Requête lente</button>
+        <button id="btn-plan-fast" class="btn-secondary">Requête optimisée</button>
+    </div>
+    <div id="flowchart" class="flowchart"></div>
+</section>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{% static 'js/charts.js' %}"></script>
+<script src="{% static 'js/editor.js' %}"></script>
+<script src="{% static 'js/flowchart.js' %}"></script>
 {% endblock %}

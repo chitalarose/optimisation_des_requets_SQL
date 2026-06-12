@@ -25,3 +25,14 @@ def liste_cours(request):
     }
     # On utilise cours_liste.html (le fichier de ta développeuse)
     return render(request, 'labo_performance/cours_liste.html', context)
+# Vue pour le Laboratoire Avant/Après
+def labo(request):
+    return render(request, 'labo_performance/labo.html')
+
+# Vue pour le Quiz
+def quiz(request):
+    return render(request, 'labo_performance/quiz.html')
+
+# Vue pour À propos
+def a_propos(request):
+    return render(request, 'labo_performance/a_propos.html')
