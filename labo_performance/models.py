@@ -47,3 +47,16 @@ class RecommandationOptimisation(models.Model):
 
     def __str__(self):
         return self.titre
+
+# 4. Modèle pour le Développeur 2 (Base de test pour simuler les lenteurs)
+class CommandeTest(models.Model):
+    """Table de test du Développeur 2 contenant des milliers de lignes pour simuler les requêtes lentes"""
+    client_nom = models.CharField(max_length=100)
+    produit = models.CharField(max_length=100)
+    quantite = models.IntegerField()
+    prix_unitaire = models.FloatField()
+    date_commande = models.DateTimeField(auto_now_add=True)
+    statut = models.CharField(max_length=20, default='En cours')
+
+    def __str__(self):
+        return f"Commande {self.id} - {self.client_nom}"
