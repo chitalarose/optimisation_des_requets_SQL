@@ -10,6 +10,10 @@ def verifier_securite_sql(requete_sql):
     """
     sql_clean = requete_sql.strip().upper()
     
+    # Protection contre les requêtes vides
+    if not sql_clean:
+        return False, "La requête SQL ne peut pas être vide."
+    
     # Sécurité absolue : Seules les requêtes de lecture (SELECT) sont autorisées
     if not sql_clean.startswith("SELECT") and not sql_clean.startswith("EXPLAIN"):
         return False, "Action interdite. Seules les requêtes de lecture (SELECT) sont autorisées dans la Sandbox."
@@ -29,15 +33,22 @@ def verifier_securite_sql(requete_sql):
 def executer_et_analyser_sql(requete_sql):
     """
     Exécute la requête SQL, calcule son temps en millisecondes
-    et récupère le plan d'exécution EXPLAIN ANALYZE.
+    et récupère le plan d'exécution adapté au moteur de base de données (SQLite ou PostgreSQL).
     """
     resultats = []
     colonnes = []
     temps_execution_ms = 0.0
     explain_plan = ""
 
-    # Préparation automatique du EXPLAIN ANALYZE pour l'analyse de performance
-    sql_explain = f"EXPLAIN ANALYZE {requete_sql}" if not requete_sql.strip().upper().startswith("EXPLAIN") else requete_sql
+    # Détection automatique du moteur de base de données actuel
+    is_sqlite = connection.vendor == 'sqlite'
+    prefixe_explain = "EXPLAIN QUERY PLAN " if is_sqlite else "EXPLAIN ANALYZE "
+
+    # Préparation automatique du EXPLAIN adapté
+    if not requete_sql.strip().upper().startswith("EXPLAIN"):
+        sql_explain = f"{prefixe_explain}{requete_sql}"
+    else:
+        sql_explain = requete_sql
 
     with connection.cursor() as cursor:
         try:
@@ -51,10 +62,15 @@ def executer_et_analyser_sql(requete_sql):
             # Calcul précis en millisecondes
             temps_execution_ms = (end_time - start_time) * 1000
 
-            # --- Récupération du plan d'optimisation (EXPLAIN ANALYZE) ---
+            # --- Récupération du plan d'optimisation adapté ---
             cursor.execute(sql_explain)
             raw_explain = cursor.fetchall()
-            explain_plan = "\n".join([row[0] for row in raw_explain])
+            
+            # Mise en forme propre selon le format du résultat de l'EXPLAIN
+            if is_sqlite:
+                explain_plan = "\n".join([f"Ordre: {row[0]} | Opération: {row[3]}" for row in raw_explain])
+            else:
+                explain_plan = "\n".join([row[0] for row in raw_explain])
 
         except Exception as e:
             return {
@@ -62,10 +78,15 @@ def executer_et_analyser_sql(requete_sql):
                 'erreur': str(e)
             }
 
+    # Simulation d'un coût estimé pour le dashboard (très utile pour le dév 5 en SQLite)
+    cout_estime = len(raw_explain) * 10 if 'raw_explain' in locals() else 0
+
     return {
         'succes': True,
-        'resultats': resultats,
+        'resultats': resultats[:100],  # On limite à 100 lignes pour éviter la surcharge du navigateur
         'colonnes': colonnes,
         'temps_ms': round(temps_execution_ms, 3),
-        'explain': explain_plan
+        'explain': explain_plan,
+        'estimated_cost': cout_estime,
+        'total_rows': len(resultats)
     }

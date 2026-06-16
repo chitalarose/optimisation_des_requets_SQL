@@ -64,6 +64,7 @@ def laboratoire_view(request):
     return render(request, 'labo_performance/labo.html')
 
 @login_required
+@login_required
 def api_executer_requete_sql(request):
     """
     API asynchrone appelée en arrière-plan par le Développeur 3 (JavaScript) 
@@ -71,11 +72,10 @@ def api_executer_requete_sql(request):
     """
     if request.method == 'POST':
         try:
-            # Récupération de la requête envoyée en JSON par le JS front-end
             data = json.loads(request.body)
             requete_sql = data.get('sql', '')
             
-            # 1. Sécurité : On passe le code dans ton filtre de sécurité (utils.py)
+            # 1. Sécurité : Filtre de sécurité
             est_securise, message_erreur = verifier_securite_sql(requete_sql)
             if not est_securise:
                 return JsonResponse({
@@ -83,10 +83,10 @@ def api_executer_requete_sql(request):
                     'erreur': message_erreur
                 }, status=400)
             
-            # 2. Performance : On lance ton moteur d'analyse EXPLAIN ANALYZE (utils.py)
+            # 2. Performance : Analyse et exécution
             analyse_resultat = executer_et_analyser_sql(requete_sql)
             
-            # On renvoie toutes les métriques calculées au front-end (Dev 3 et Dev 5)
+            # Renvoie le dictionnaire complet généré par utils.py
             return JsonResponse(analyse_resultat)
             
         except Exception as e:
