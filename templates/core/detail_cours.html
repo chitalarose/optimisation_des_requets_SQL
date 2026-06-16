@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ cours.titre }} - SQL Optimizer{% endblock %}
+
+{% block content %}
+<div class="course-detail-container">
+    <div class="back-to-courses">
+        <a href="{% url 'liste_cours' %}" class="btn-back">← Retour aux cours</a>
+    </div>
+
+    <div class="course-main-layout">
+        <!-- COLONNE GAUCHE : Contenu dynamique de la BD -->
+        <article class="course-article">
+            <header class="article-header">
+                <span class="badge">{{ cours.niveau }}</span>
+                <h1>{{ cours.titre }}</h1>
+            </header>
+            <hr>
+            <section class="article-content">
+                <!-- |safe permet d'afficher le HTML si le contenu contient des balises de code -->
+                {{ cours.contenu|safe }}
+            </section>
+
+            <!-- SECTION EVALUATION / QUIZ INTEGRÉE -->
+            {% if quizs %}
+            <section class="quiz-section-integrated">
+                <h2>📝 Évaluation du cours</h2>
+                {% for quiz in quizs %}
+                <div class="quiz-card" data-quiz-id="{{ quiz.id }}">
+                    <h3>{{ quiz.question }}</h3>
+                    <div class="quiz-options">
+                        <!-- Structure brute que le Dév 5 dynamisera en JS -->
+                        <button class="option-btn" data-choice="A">{{ quiz.option_a }}</button>
+                        <button class="option-btn" data-choice="B">{{ quiz.option_b }}</button>
+                        <button class="option-btn" data-choice="C">{{ quiz.option_c }}</button>
+                        <button class="option-btn" data-choice="D">{{ quiz.option_d }}</button>
+                    </div>
+                </div>
+                {% endfor %}
+            </section>
+            {% endif %}
+        </article>
+
+        <!-- COLONNE DROITE : Sommaire -->
+        <aside class="course-sidebar">
+            <div class="sidebar-widget widget-summary">
+                <h3>Sommaire</h3>
+                <p>Vous lisez actuellement : <strong>{{ cours.titre }}</strong></p>
+            </div>
+            <div class="sidebar-widget widget-lab-invite">
+                <h3>Exemple pratique</h3>
+                <p>Testez vos requêtes en temps réel.</p>
+                <a href="/labo/" class="btn-sidebar-action">Ouvrir le laboratoire</a>
+            </div>
+        </aside>
+    </div>
+</div>
+{% endblock %}
