@@ -14,13 +14,19 @@
         <button class="btn-filter">Avancé</button>
     </div>
 
+    <!-- Grille dynamique connectée au Back-end -->
     <div class="courses-grid">
+        {% for cours in courses %}
         <div class="course-card">
-            <h3>Les bases des index</h3>
-            <p>Découvrez comment les index fonctionnent et améliorent les performances...</p>
-            <span class="badge badge-easy">Débutant</span>
-            <a href="#" class="btn-link">Lire le cours →</a>
+            <h3>{{ cours.titre }}</h3>
+            <p>{{ cours.description|truncatewords:20 }}</p>
+            <span class="badge">{{ cours.niveau }}</span>
+            <!-- Redirige dynamiquement vers le détail du cours -->
+            <a href="{% url 'detail_cours' cours.id %}" class="btn-link">Lire le cours →</a>
         </div>
-        </div>
+        {% empty %}
+        <p>Aucun cours n'est disponible pour le moment.</p>
+        {% endfor %}
+    </div>
 </section>
 {% endblock %}
