@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Cours et Tutoriels - SQL Optimizer{% endblock %}
+
+{% block content %}
+<section class="courses-container">
+    <h1>Cours et Tutoriels</h1>
+    <p>Apprenez à optimiser vos requêtes SQL étape par étape.</p>
+    
+    <div class="filter-buttons">
+        <button class="btn-filter active">Tous les niveaux</button>
+        <button class="btn-filter">Débutant</button>
+        <button class="btn-filter">Intermédiaire</button>
+        <button class="btn-filter">Avancé</button>
+    </div>
+
+    <!-- Grille dynamique connectée au Back-end -->
+    <div class="courses-grid">
+        {% for cours in courses %}
+        <div class="course-card">
+            <h3>{{ cours.titre }}</h3>
+            <p>{{ cours.description|truncatewords:20 }}</p>
+            <span class="badge">{{ cours.niveau }}</span>
+            <!-- Redirige dynamiquement vers le détail du cours -->
+            <a href="{% url 'detail_cours' cours.id %}" class="btn-link">Lire le cours →</a>
+        </div>
+        {% empty %}
+        <p>Aucun cours n'est disponible pour le moment.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

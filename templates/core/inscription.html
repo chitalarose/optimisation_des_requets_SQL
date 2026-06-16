@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Inscription - SQL Optimizer{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <h2>Créer un compte</h2>
+        <p>Rejoignez la plateforme SQL Optimizer pour améliorer vos compétences.</p>
+        
+        <form method="POST" action="">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.as_p }}
+            </div>
+            <button type="submit" class="btn-auth-submit">S'inscrire</button>
+        </form>
+        
+        <p class="auth-switch">Déjà inscrit ? <a href="/auth/connexion/">Connectez-vous ici</a></p>
+    </div>
+</div>
+{% endblock %}
