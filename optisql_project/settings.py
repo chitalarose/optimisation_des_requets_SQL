@@ -58,6 +58,7 @@ ROOT_URLCONF = 'optisql_project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        # On laisse vide ici car Django cherche tout seul grâce à APP_DIRS = True
         'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -69,7 +70,6 @@ TEMPLATES = [
         },
     },
 ]
-
 WSGI_APPLICATION = 'optisql_project.wsgi.application'
 
 
