@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Quiz & Évaluation - SQL Optimizer{% endblock %}
+
+{% block content %}
+<div class="quiz-container">
+    <div class="quiz-progress-bar">
+        <div class="progress" style="width: 20%;"></div>
+    </div>
+
+    <div class="quiz-card">
+        <span class="question-number">Question 2 / 10</span>
+        <!-- L'id permettra au dév 5 d'injecter la question en JS ou via Django -->
+        <h2 id="quiz-question">Quelle commande permet d'analyser l'exécution d'une requête SQL ?</h2>
+        
+        <div class="quiz-options">
+            <button class="option-btn" data-choice="A">A. ANALYZE</button>
+            <button class="option-btn" data-choice="B">B. EXPLAIN</button>
+            <button class="option-btn" data-choice="C">C. DESCRIBE</button>
+            <button class="option-btn" data-choice="D">D. PROFILE</button>
+        </div>
+
+        <div class="quiz-footer">
+            <button id="btn-next-question" class="btn-next">Suivant ➔</button>
+        </div>
+    </div>
+</div>
+{% endblock %}

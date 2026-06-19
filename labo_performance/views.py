@@ -1,35 +1,24 @@
-from django.shortcuts import render, get_object_or_404
-from .models import Cours, RequeteSandbox
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+import json
+
+# Importation de tes modèles (Dev 1 & 2)
+from .models import RequeteSandbox, CommandeTest
+# Importation de ton moteur de sécurité et de performance (Dev 2)
+from .utils import verifier_securite_sql, executer_et_analyser_sql
 
 # Vue pour le Dashboard principal (Home)
 def dashboard_home(request):
     # On récupère les 5 dernières analyses pour les afficher sur le tableau de bord
     dernieres_analyses = RequeteSandbox.objects.all().order_by('-cree_le')[:5]
-    
+
     context = {
         'dernieres_analyses': dernieres_analyses,
     }
     # On utilise index.html (le fichier de ta développeuse)
     return render(request, 'labo_performance/index.html', context)
-
-# Vue pour la liste des cours (Espace Learn)
-def liste_cours(request):
-    cours_debutant = Cours.objects.filter(niveau='DEB')
-    cours_intermediaire = Cours.objects.filter(niveau='INT')
-    cours_avance = Cours.objects.filter(niveau='AV')
-    
-    context = {
-        'cours_debutant': cours_debutant,
-        'cours_intermediaire': cours_intermediaire,
-        'cours_avance': cours_avance,
-    }
-    # On utilise cours_liste.html (le fichier de ta développeuse)
-    return render(request, 'labo_performance/cours_liste.html', context)
-
-# Vue pour la lecture d'un cours
-def cours_detail(request, slug):
-    cours = get_object_or_404(Cours, slug=slug)
-    return render(request, 'labo_performance/cours_detail.html', {'cours': cours})
 
 # Vue pour le Laboratoire Avant/Après
 def labo(request):
@@ -43,10 +32,6 @@ def quiz(request):
 def a_propos(request):
     return render(request, 'labo_performance/a_propos.html')
 
-
-import json
-from django.http import JsonResponse
-from django.views.decorators.http import require_POST
 
 @require_POST
 def execute_sql(request):
@@ -94,3 +79,45 @@ def execute_sql(request):
             {"error": str(e)},
             status=400
         )
+
+
+# =====================================================================
+#  PARTIE DÉV 2 : MOTEUR SQL, ANALYSE & SÉCURITÉ (LABORATOIRE)
+#  Moteur réel (utils.py) — branché sur une route séparée en attendant
+#  que le JS (editor.js) soit adapté au format de réponse de ce moteur.
+# =====================================================================
+
+@login_required
+def laboratoire_view(request):
+    """Affiche la page du laboratoire d'optimisation (Page 4 de la maquette)"""
+    return render(request, 'labo_performance/labo.html')
+
+@login_required
+def api_executer_requete_sql(request):
+    """
+    API asynchrone appelée en arrière-plan par le Développeur 3 (JavaScript)
+    pour analyser et exécuter le SQL de la Sandbox (Page 4 de la maquette).
+    """
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            requete_sql = data.get('sql', '')
+
+            # 1. Sécurité : Filtre de sécurité
+            est_securise, message_erreur = verifier_securite_sql(requete_sql)
+            if not est_securise:
+                return JsonResponse({
+                    'succes': False,
+                    'erreur': message_erreur
+                }, status=400)
+
+            # 2. Performance : Analyse et exécution
+            analyse_resultat = executer_et_analyser_sql(requete_sql)
+
+            # Renvoie le dictionnaire complet généré par utils.py
+            return JsonResponse(analyse_resultat)
+
+        except Exception as e:
+            return JsonResponse({'succes': False, 'erreur': str(e)}, status=500)
+
+    return JsonResponse({'succes': False, 'erreur': 'Méthode non autorisée'}, status=405)

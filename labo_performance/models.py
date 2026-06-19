@@ -1,22 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-# 1. Modèle pour l'espace "Learn" (Les cours/tutoriels SQL)
-class Cours(models.Model):
-    NIVEAU_CHOICES = (
-        ('DEB', 'Débutant'),
-        ('INT', 'Intermédiaire'),
-        ('AV', 'Avancé'),
-    )
-    titre = models.CharField(max_length=200)
-    niveau = models.CharField(max_length=3, choices=NIVEAU_CHOICES)
-    slug = models.SlugField(max_length=200, unique=True)
-    description = models.TextField()
-    contenu_markdown = models.TextField()
-    cree_le = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.titre
+# Le modèle Cours vit maintenant dans l'app "core" (core/models.py) — pas de doublon ici.
 
 # 2. Modèle pour l'espace "Optimize" (La Sandbox et l'historique de l'éditeur)
 class RequeteSandbox(models.Model):
@@ -47,3 +32,16 @@ class RecommandationOptimisation(models.Model):
 
     def __str__(self):
         return self.titre
+
+# 4. Modèle pour le Développeur 2 (Base de test pour simuler les lenteurs)
+class CommandeTest(models.Model):
+    """Table de test du Développeur 2 contenant des milliers de lignes pour simuler les requêtes lentes"""
+    client_nom = models.CharField(max_length=100)
+    produit = models.CharField(max_length=100)
+    quantite = models.IntegerField()
+    prix_unitaire = models.FloatField()
+    date_commande = models.DateTimeField(auto_now_add=True)
+    statut = models.CharField(max_length=20, default='En cours')
+
+    def __str__(self):
+        return f"Commande {self.id} - {self.client_nom}"

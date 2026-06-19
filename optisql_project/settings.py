@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'core',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -57,7 +58,9 @@ ROOT_URLCONF = 'optisql_project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'labo_performance' / 'templates'],
+        # APP_DIRS=True trouve déjà labo_performance/templates/ et core/templates/ automatiquement.
+        # On ajoute le dossier racine pour templates/base.html et templates/core/*.html.
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -68,7 +71,6 @@ TEMPLATES = [
         },
     },
 ]
-
 WSGI_APPLICATION = 'optisql_project.wsgi.application'
 
 
