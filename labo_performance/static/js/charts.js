@@ -70,12 +70,29 @@ function updateChart(newTime) {
     }
     barChart.data.datasets[0].data = [beforeTime, afterTime];
     barChart.update();
+    updateGainDisplay();
+}
 
-    // Afficher le gain
+// Met à jour les deux barres en une seule fois (réponse contenant déjà
+// temps_execution_avant / temps_execution_apres)
+function updateChartPair(before, after) {
+    if (!barChart) return;
+    beforeTime = before;
+    afterTime = after;
+    queryCount = 2;
+    barChart.data.datasets[0].data = [beforeTime, afterTime];
+    barChart.update();
+    updateGainDisplay();
+}
+
+function updateGainDisplay() {
     const gainEl = document.getElementById('perf-gain');
-    if (gainEl && beforeTime > 0 && afterTime > 0) {
+    if (!gainEl) return;
+    if (beforeTime > 0 && afterTime > 0) {
         const gain = Math.round(((beforeTime - afterTime) / beforeTime) * 100);
         gainEl.textContent = gain > 0 ? gain + '% plus rapide !' : '';
+    } else {
+        gainEl.textContent = '';
     }
 }
 

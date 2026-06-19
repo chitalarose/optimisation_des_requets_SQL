@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import Cours, RequeteSandbox
 
 # Vue pour le Dashboard principal (Home)
@@ -25,6 +25,12 @@ def liste_cours(request):
     }
     # On utilise cours_liste.html (le fichier de ta développeuse)
     return render(request, 'labo_performance/cours_liste.html', context)
+
+# Vue pour la lecture d'un cours
+def cours_detail(request, slug):
+    cours = get_object_or_404(Cours, slug=slug)
+    return render(request, 'labo_performance/cours_detail.html', {'cours': cours})
+
 # Vue pour le Laboratoire Avant/Après
 def labo(request):
     return render(request, 'labo_performance/labo.html')
@@ -36,3 +42,55 @@ def quiz(request):
 # Vue pour À propos
 def a_propos(request):
     return render(request, 'labo_performance/a_propos.html')
+
+
+import json
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+
+@require_POST
+def execute_sql(request):
+
+    try:
+        body = json.loads(request.body)
+        sql = body.get('sql', '')
+
+        # Données de démonstration (en attendant le moteur EXPLAIN ANALYZE du Dev 2)
+        # execution_plan_json suit le format PostgreSQL EXPLAIN (ANALYZE, FORMAT JSON)
+        result = {
+            "execution_time": 1248.32,
+            "rows_analyzed": 522963,
+            "index_used": False,
+            "temps_execution_avant": 1248.32,
+            "temps_execution_apres": 0.48,
+            "explain": """
+            Seq Scan on commandes
+            (cost=0.00..18450.00 rows=37 width=128)
+            (actual time=0.02..1248.32 rows=37 loops=1)
+              Filter: (date(created_at) = '2024-01-01'::date)
+              Rows Removed by Filter: 522963
+                """,
+            "execution_plan_json": [{
+                "Plan": {
+                    "Node Type": "Seq Scan",
+                    "Relation Name": "commandes",
+                    "Total Cost": 18450.00,
+                    "Plan Rows": 37,
+                    "Actual Rows": 37,
+                    "Actual Total Time": 1248.32,
+                    "Filter": "(date(created_at) = '2024-01-01'::date)",
+                    "Rows Removed by Filter": 522963,
+                    "Plans": []
+                },
+                "Planning Time": 0.40,
+                "Execution Time": 1248.32
+            }],
+        }
+
+        return JsonResponse(result)
+
+    except Exception as e:
+        return JsonResponse(
+            {"error": str(e)},
+            status=400
+        )

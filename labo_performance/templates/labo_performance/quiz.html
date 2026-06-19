@@ -1,27 +1,68 @@
 {% extends 'labo_performance/base.html' %}
+{% load static %}
 
 {% block title %}Quiz & Évaluation - SQL Optimizer{% endblock %}
 
 {% block content %}
 <div class="quiz-container">
-    <div class="quiz-progress-bar">
-        <div class="progress" style="width: 20%;"></div>
-    </div>
 
-    <div class="quiz-card">
-        <span class="question-number">Question 2 / 10</span>
-        <h2 id="quiz-question">Quelle commande permet d'analyser l'exécution d'une requête SQL ?</h2>
-        
-        <div class="quiz-options">
-            <button class="option-btn">A. ANALYZE</button>
-            <button class="option-btn">B. EXPLAIN</button>
-            <button class="option-btn">C. DESCRIBE</button>
-            <button class="option-btn">D. PROFILE</button>
+    <!-- Quiz -->
+    <div id="quiz-section" class="quiz-section">
+
+        <div class="quiz-topbar">
+            <span id="question-number" class="question-number">Question 1 / 10</span>
+            <span id="level-badge" class="level-badge">débutant</span>
+            <span id="timer" class="timer">30s</span>
+            <span class="score-wrap">Score : <span id="score-display">0</span></span>
+            <span id="streak-display" class="streak-display">🔥 0</span>
         </div>
 
-        <div class="quiz-footer">
-            <button id="btn-next-question" class="btn-next">Suivant ➔</button>
+        <div class="quiz-progress-bar">
+            <div id="progress-bar" class="progress" style="width: 0%;"></div>
+        </div>
+
+        <div class="quiz-card">
+            <h2 id="question-text">Chargement de la question…</h2>
+
+            <div id="options-container" class="quiz-options"></div>
+
+            <div id="feedback" class="feedback" style="display:none;"></div>
+
+            <div class="quiz-footer">
+                <button id="next-btn" class="btn-next" style="display:none;">Suivant ➔</button>
+            </div>
         </div>
     </div>
+
+    <!-- Résultats finaux -->
+    <div id="final-section" class="final-section" style="display:none;">
+        <h2>Résultats du quiz</h2>
+
+        <div id="final-badge" class="final-badge"></div>
+        <p id="final-message" class="final-message"></p>
+
+        <div class="final-stats">
+            <p><strong>Score :</strong> <span id="final-score">—</span></p>
+            <p><strong>Taux de réussite :</strong> <span id="final-percentage">—</span></p>
+            <p><strong>Bonnes réponses :</strong> <span id="final-correct">—</span></p>
+            <p><strong>Meilleure série :</strong> <span id="final-streak">—</span></p>
+        </div>
+
+        <div class="result-chart-wrap" style="position:relative; height:220px;">
+            <canvas id="result-chart"></canvas>
+        </div>
+
+        <button id="restart-btn" class="btn-run">Recommencer le quiz</button>
+    </div>
+
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{% static 'js/quiz.js' %}"></script>
+<script>
+    document.getElementById('next-btn').addEventListener('click', nextQuestion);
+    document.getElementById('restart-btn').addEventListener('click', restartQuiz);
+</script>
 {% endblock %}

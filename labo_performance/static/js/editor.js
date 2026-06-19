@@ -72,9 +72,20 @@ function showResult(data) {
     // EXPLAIN
     if (resultBox) resultBox.textContent = data.explain || 'Pas de plan disponible.';
 
-    // Mettre à jour le graphique
-    if (typeof updateChart === 'function') {
+    // Mettre à jour le graphique Avant/Après
+    if (typeof updateChartPair === 'function'
+        && data.temps_execution_avant !== undefined
+        && data.temps_execution_apres !== undefined) {
+        updateChartPair(data.temps_execution_avant, data.temps_execution_apres);
+    } else if (typeof updateChart === 'function') {
         updateChart(data.execution_time);
+    }
+
+    // Afficher le plan d'exécution sous forme de flowchart
+    if (typeof renderFlowchart === 'function') {
+        renderFlowchart(
+            data.execution_plan_json || (data.index_used ? 'fast' : 'slow')
+        );
     }
 }
 

@@ -1,4 +1,5 @@
 {% extends 'labo_performance/base.html' %}
+{% load static %}
 
 {% block title %}Cours et Tutoriels - SQL Optimizer{% endblock %}
 
@@ -6,21 +7,49 @@
 <section class="courses-container">
     <h1>Cours et Tutoriels</h1>
     <p>Apprenez à optimiser vos requêtes SQL étape par étape.</p>
-    
+
     <div class="filter-buttons">
-        <button class="btn-filter active">Tous les niveaux</button>
-        <button class="btn-filter">Débutant</button>
-        <button class="btn-filter">Intermédiaire</button>
-        <button class="btn-filter">Avancé</button>
+        <button class="btn-filter active" data-filter="all">Tous les niveaux</button>
+        <button class="btn-filter" data-filter="DEB">Débutant</button>
+        <button class="btn-filter" data-filter="INT">Intermédiaire</button>
+        <button class="btn-filter" data-filter="AV">Avancé</button>
     </div>
 
-    <div class="courses-grid">
-        <div class="course-card">
-            <h3>Les bases des index</h3>
-            <p>Découvrez comment les index fonctionnent et améliorent les performances...</p>
+    <div class="courses-grid" id="courses-grid">
+        {% for cours in cours_debutant %}
+        <div class="course-card" data-level="DEB">
+            <h3>{{ cours.titre }}</h3>
+            <p>{{ cours.description }}</p>
             <span class="badge badge-easy">Débutant</span>
-            <a href="#" class="btn-link">Lire le cours →</a>
+            <a href="{% url 'cours_detail' cours.slug %}" class="btn-link">Lire le cours →</a>
         </div>
+        {% endfor %}
+
+        {% for cours in cours_intermediaire %}
+        <div class="course-card" data-level="INT">
+            <h3>{{ cours.titre }}</h3>
+            <p>{{ cours.description }}</p>
+            <span class="badge badge-medium">Intermédiaire</span>
+            <a href="{% url 'cours_detail' cours.slug %}" class="btn-link">Lire le cours →</a>
         </div>
+        {% endfor %}
+
+        {% for cours in cours_avance %}
+        <div class="course-card" data-level="AV">
+            <h3>{{ cours.titre }}</h3>
+            <p>{{ cours.description }}</p>
+            <span class="badge badge-hard">Avancé</span>
+            <a href="{% url 'cours_detail' cours.slug %}" class="btn-link">Lire le cours →</a>
+        </div>
+        {% endfor %}
+
+        {% if not cours_debutant and not cours_intermediaire and not cours_avance %}
+        <p class="empty-state">Aucun cours disponible pour le moment.</p>
+        {% endif %}
+    </div>
 </section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/cours.js' %}"></script>
 {% endblock %}
