@@ -1,0 +1,18 @@
+@media(max-width:768px){
+
+    .hero-section h1{
+        font-size:32px;
+    }
+
+    .hero-section p{
+        font-size:18px;
+    }
+
+    .hero-buttons{
+        flex-direction:column;
+    }
+
+    .stats{
+        grid-template-columns:1fr;
+    }
+}

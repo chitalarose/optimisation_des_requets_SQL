@@ -1,0 +1,12 @@
+.labo-comparison-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:30px;
+}
+
+.labo-card card-before{
+    background:#0F172A;
+    color:white;
+    padding:30px;
+    border-radius:15px;
+}

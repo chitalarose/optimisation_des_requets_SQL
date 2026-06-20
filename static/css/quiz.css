@@ -1,0 +1,12 @@
+.quiz-container{
+    border:1px solid #ccc;
+    padding:15px;
+    border-radius:10px;
+    margin-bottom:15px;
+    cursor:pointer;
+}
+
+.quiz-options
+.quiz-footer{
+    border-color:#2563EB;
+}
